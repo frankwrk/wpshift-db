@@ -1,12 +1,12 @@
 {
-  "name": "wp-sync-db/wp-sync-db",
+  "name": "fahim-spurbee/wp-shift-db",
   "type": "wordpress-plugin",
-  "homepage": "https://github.com/wp-sync-db/wp-sync-db",
+  "homepage": "https://github.com/fahim-spurbee/wp-shift-db",
   "license": "GPL-2.0",
-  "description": "WP Sync DB eliminates the manual work of migrating a WP database.",
+  "description": "WP Shift DB eliminates the manual work of migrating a WP database.",
   "keywords": ["plugin","wordpress","wp-sync-db","db"],
   "require": {
-    "composer/installers": "~1.0.6"
+    "composer/installers": "~1.4"
   },
   "scripts": {
     "test": "./test.sh"
