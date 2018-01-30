@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: WP Sync DB\n"
+"Project-Id-Version: WP Shift DB\n"
 "POT-Creation-Date: 2014-05-28 13:07+1000\n"
 "PO-Revision-Date: 2014-05-28 13:08+1000\n"
 "Last-Translator: Delicious Brains <nom@deliciousbrains.com>\n"
@@ -89,7 +89,7 @@ msgstr ""
 #: class/wpsdb-base.php:202
 #, php-format
 msgid ""
-"WP Sync DB does not seem to be installed or active on the remote "
+"WP Shift DB does not seem to be installed or active on the remote "
 "site. (#131 - scope: %s)"
 msgstr ""
 
@@ -268,7 +268,7 @@ msgstr ""
 #, php-format
 msgid ""
 "The version of the %1$s addon you have installed%2$s is out-of-date and will "
-"not work with this version WP Sync DB. <a href=\"%3$s\">Update Now</a>"
+"not work with this version WP Shift DB. <a href=\"%3$s\">Update Now</a>"
 msgstr ""
 
 #: class/wpsdb.php:1464
@@ -684,7 +684,7 @@ msgstr ""
 
 #: template/help.php:5
 msgid ""
-"A brief walkthrough of the WP Sync DB plugin showing all of the different "
+"A brief walkthrough of the WP Shift DB plugin showing all of the different "
 "options and explaining them."
 msgstr ""
 
@@ -1051,7 +1051,7 @@ msgid ""
 "Some plugins add a lot of overhead to each request, requiring extra memory "
 "and CPU. And some plugins even interfere with migrations and cause them to "
 "fail. We recommend only loading plugins that affect migration requests, for "
-"example a plugin that hooks into WP Sync DB."
+"example a plugin that hooks into WP Shift DB."
 msgstr ""
 
 #: template/settings.php:77

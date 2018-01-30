@@ -22,8 +22,8 @@ class WPSDB extends WPSDB_Base {
 	function __construct( $plugin_file_path ) {
 		parent::__construct( $plugin_file_path );
 
-		$this->plugin_slug = 'wp-sync-db';
-		$this->plugin_version = $GLOBALS['wpsdb_meta']['wp-sync-db']['version'];
+		$this->plugin_slug = 'wp-shift-db';
+		$this->plugin_version = $GLOBALS['wpsdb_meta']['wp-shift-db']['version'];
 
 		$this->max_insert_string_len = 50000; // 50000 is the default as defined by phphmyadmin
 
@@ -170,11 +170,11 @@ class WPSDB extends WPSDB_Base {
 
 		if ( is_multisite() ) {
 			add_action( 'network_admin_menu', array( $this, 'network_admin_menu' ) );
-			$this->plugin_base = 'settings.php?page=wp-sync-db';
+			$this->plugin_base = 'settings.php?page=wp-shift-db';
 		}
 		else {
 			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-			$this->plugin_base = 'tools.php?page=wp-sync-db';
+			$this->plugin_base = 'tools.php?page=wp-shift-db';
 		}
 	}
 
@@ -186,20 +186,20 @@ class WPSDB extends WPSDB_Base {
 
 	function ajax_plugin_compatibility() {
 		$mu_dir = ( defined( 'WPMU_PLUGIN_DIR' ) && defined( 'WPMU_PLUGIN_URL' ) ) ? WPMU_PLUGIN_DIR : trailingslashit( WP_CONTENT_DIR ) . 'mu-plugins';
-		$source = trailingslashit( $this->plugin_dir_path ) . 'compatibility/wp-sync-db-compatibility.php';
-		$dest = trailingslashit( $mu_dir ) . 'wp-sync-db-compatibility.php';
+		$source = trailingslashit( $this->plugin_dir_path ) . 'compatibility/wp-shift-db-compatibility.php';
+		$dest = trailingslashit( $mu_dir ) . 'wp-shift-db-compatibility.php';
 		if ( '1' === trim( $_POST['install'] ) ) { // install MU plugin
 			if ( !wp_mkdir_p( $mu_dir ) ) {
-				_e( sprintf( 'The following directory could not be created: %s', $mu_dir ), 'wp-sync-db' );
+				_e( sprintf( 'The following directory could not be created: %s', $mu_dir ), 'wp-shift-db' );
 				exit;
 			}
 			if ( !copy( $source, $dest ) ) {
-				_e( sprintf( 'Could not copy the compatibility plugin from %1$s to %2$s', $source, $destination ), 'wp-sync-db' );
+				_e( sprintf( 'Could not copy the compatibility plugin from %1$s to %2$s', $source, $destination ), 'wp-shift-db' );
 				exit;
 			}
 		} else { // uninstall MU plugin
 			if ( file_exists( $dest ) && !unlink( $dest ) ) {
-				_e( sprintf( 'Could not remove the compatibility plugin from %s', $dest ), 'wp-sync-db' );
+				_e( sprintf( 'Could not remove the compatibility plugin from %s', $dest ), 'wp-shift-db' );
 				exit;
 			}
 		}
@@ -254,10 +254,10 @@ class WPSDB extends WPSDB_Base {
 		$upload_info['path'] = $upload_dir['basedir'];
 		$upload_info['url'] = $upload_dir['baseurl'];
 
-		$upload_dir_name = apply_filters( 'wpsdb_upload_dir_name', 'wp-sync-db' );
+		$upload_dir_name = apply_filters( 'wpsdb_upload_dir_name', 'wp-shift-db' );
 
 		if( ! file_exists( $upload_dir['basedir'] . DS . $upload_dir_name ) ) {
-			$url = wp_nonce_url( $this->plugin_base, 'wp-sync-db-nonce' );
+			$url = wp_nonce_url( $this->plugin_base, 'wp-shift-db-nonce' );
 
 			if( false === @mkdir( $upload_dir['basedir'] . DS . $upload_dir_name, 0755 ) ) {
 				return $upload_info[$type];
@@ -308,7 +308,7 @@ class WPSDB extends WPSDB_Base {
 	}
 
 	function plugin_action_links( $links ) {
-		$link = sprintf( '<a href="%s">%s</a>', network_admin_url( $this->plugin_base ), __( 'Settings', 'wp-sync-db' ) );
+		$link = sprintf( '<a href="%s">%s</a>', network_admin_url( $this->plugin_base ), __( 'Settings', 'wp-shift-db' ) );
 		array_unshift( $links, $link );
 		return $links;
 	}
@@ -616,12 +616,12 @@ class WPSDB extends WPSDB_Base {
 
 		$tmp_file_path = wp_tempnam( $tmp_file_name );
 		if ( !isset( $_FILES['chunk']['tmp_name'] ) || !move_uploaded_file( $_FILES['chunk']['tmp_name'], $tmp_file_path ) ) {
-			$result = $this->end_ajax( __( 'Could not upload the SQL to the server. (#135)', 'wp-sync-db' ) );
+			$result = $this->end_ajax( __( 'Could not upload the SQL to the server. (#135)', 'wp-shift-db' ) );
 			return $result;
 		}
 
 		if ( false === ( $chunk = file_get_contents( $tmp_file_path ) ) ) {
-			$result = $this->end_ajax( __( 'Could not read the SQL file we uploaded to the server. (#136)', 'wp-sync-db' ) );
+			$result = $this->end_ajax( __( 'Could not read the SQL file we uploaded to the server. (#136)', 'wp-shift-db' ) );
 			return $result;
 		}
 
@@ -637,7 +637,7 @@ class WPSDB extends WPSDB_Base {
 		}
 
 		if ( $this->settings['allow_push'] != true ) {
-			$result = $this->end_ajax( __( 'The connection succeeded but the remote site is configured to reject push connections. You can change this in the "settings" tab on the remote site. (#133)', 'wp-sync-db' ) );
+			$result = $this->end_ajax( __( 'The connection succeeded but the remote site is configured to reject push connections. You can change this in the "settings" tab on the remote site. (#133)', 'wp-shift-db' ) );
 			return $result;
 		}
 
@@ -854,7 +854,7 @@ class WPSDB extends WPSDB_Base {
 		}
 
 		if ( $this->settings['allow_pull'] != true ) {
-			$result = $this->end_ajax( __( 'The connection succeeded but the remote site is configured to reject pull connections. You can change this in the "settings" tab on the remote site. (#132)', 'wp-sync-db' ) );
+			$result = $this->end_ajax( __( 'The connection succeeded but the remote site is configured to reject pull connections. You can change this in the "settings" tab on the remote site. (#132)', 'wp-shift-db' ) );
 			return $result;
 		}
 
@@ -923,7 +923,7 @@ class WPSDB extends WPSDB_Base {
 			$return = @unserialize( trim( $response ) );
 
 			if ( false === $return ) {
-				$error_msg = __( 'Failed attempting to unserialize the response from the remote server. Please contact support.', 'wp-sync-db' );
+				$error_msg = __( 'Failed attempting to unserialize the response from the remote server. Please contact support.', 'wp-shift-db' );
 				$return = array( 'wpsdb_error' => 1, 'body' => $error_msg );
 				$this->log_error( $error_msg, $response );
 				$result = $this->end_ajax( json_encode( $return ) );
@@ -972,12 +972,12 @@ class WPSDB extends WPSDB_Base {
 			else {
 				$return['error'] = 1;
 				if( $_POST['intent'] == 'pull' ) {
-					$intent = __( 'pull', 'wp-sync-db' );
+					$intent = __( 'pull', 'wp-shift-db' );
 				}
 				else {
-					$intent = __( 'push', 'wp-sync-db' );
+					$intent = __( 'push', 'wp-shift-db' );
 				}
-				$return['message'] = sprintf( __( 'The connection succeeded but the remote site is configured to reject %s connections. You can change this in the "settings" tab on the remote site. (#110)', 'wp-sync-db'), $intent );
+				$return['message'] = sprintf( __( 'The connection succeeded but the remote site is configured to reject %s connections. You can change this in the "settings" tab on the remote site. (#110)', 'wp-shift-db'), $intent );
 			}
 		}
 		else {
@@ -1088,7 +1088,7 @@ class WPSDB extends WPSDB_Base {
 		$response = unserialize( trim( $response ) );
 
 		if ( false === $response ) {
-			$error_msg = __( 'Failed attempting to unserialize the response from the remote server. Please contact support.', 'wp-sync-db' );
+			$error_msg = __( 'Failed attempting to unserialize the response from the remote server. Please contact support.', 'wp-shift-db' );
 			$return = array( 'wpsdb_error' => 1, 'body' => $error_msg );
 			$this->log_error( $error_msg );
 			$result = $this->end_ajax( json_encode( $return ) );
@@ -1127,7 +1127,7 @@ class WPSDB extends WPSDB_Base {
 		$filtered_post = $this->filter_post_elements( $_POST, array( 'action', 'intent' ) );
 		if ( !$this->verify_signature( $filtered_post, $this->settings['key'] ) ) {
 			$return['error'] = 1;
-			$return['message'] = $this->invalid_content_verification_error . ' (#120) <a href="#" class="try-again js-action-link">' . __( 'Try again?', 'wp-sync-db' ) . '</a>';
+			$return['message'] = $this->invalid_content_verification_error . ' (#120) <a href="#" class="try-again js-action-link">' . __( 'Try again?', 'wp-shift-db' ) . '</a>';
 			$this->log_error( $this->invalid_content_verification_error . ' (#120)', $filtered_post );
 			$result = $this->end_ajax( serialize( $return ) );
 			return $result;
@@ -1136,12 +1136,12 @@ class WPSDB extends WPSDB_Base {
 		if ( !isset( $this->settings['allow_' . $_POST['intent']] ) || $this->settings['allow_' . $_POST['intent']] != true ) {
 			$return['error'] = 1;
 			if( $_POST['intent'] == 'pull' ) {
-				$intent = __( 'pull', 'wp-sync-db' );
+				$intent = __( 'pull', 'wp-shift-db' );
 			}
 			else {
-				$intent = __( 'push', 'wp-sync-db' );
+				$intent = __( 'push', 'wp-shift-db' );
 			}
-			$return['message'] = sprintf( __( 'The connection succeeded but the remote site is configured to reject %s connections. You can change this in the "settings" tab on the remote site. (#122) <a href="#" class="try-again js-action-link">Try again?</a>', 'wp-sync-db' ), $intent );
+			$return['message'] = sprintf( __( 'The connection succeeded but the remote site is configured to reject %s connections. You can change this in the "settings" tab on the remote site. (#122) <a href="#" class="try-again js-action-link">Try again?</a>', 'wp-shift-db' ), $intent );
 			$result = $this->end_ajax( serialize( $return ) );
 			return $result;
 		}
@@ -1322,7 +1322,7 @@ class WPSDB extends WPSDB_Base {
 
 			<div id="icon-tools" class="icon32"><br /></div><h2>Migrate DB</h2>
 
-			<h2 class="nav-tab-wrapper"><a href="#" class="nav-tab nav-tab-active js-action-link migrate" data-div-name="migrate-tab"><?php _e( 'Migrate', 'wp-sync-db' ); ?></a><a href="#" class="nav-tab js-action-link settings" data-div-name="settings-tab"><?php _e( 'Settings', 'wp-sync-db' ); ?></a><a href="#" class="nav-tab js-action-link help" data-div-name="help-tab"><?php _e( 'Help', 'wp-sync-db' ); ?></a></h2>
+			<h2 class="nav-tab-wrapper"><a href="#" class="nav-tab nav-tab-active js-action-link migrate" data-div-name="migrate-tab"><?php _e( 'Migrate', 'wp-shift-db' ); ?></a><a href="#" class="nav-tab js-action-link settings" data-div-name="settings-tab"><?php _e( 'Settings', 'wp-shift-db' ); ?></a><a href="#" class="nav-tab js-action-link help" data-div-name="help-tab"><?php _e( 'Help', 'wp-shift-db' ); ?></a></h2>
 
 			<?php do_action( 'wpsdb_notices' ); ?>
 
@@ -1342,7 +1342,7 @@ class WPSDB extends WPSDB_Base {
 				?>
 				<div class="updated warning inline-message">
 					<strong>Update Required</strong> &mdash;
-					<?php printf( __( 'The version of the %1$s addon you have installed%2$s is out-of-date and will not work with this version WP Sync DB. <a href="%3$s">Update Now</a>', 'wp-sync-db' ), $addon['name'], $version, $update_url ); ?>
+					<?php printf( __( 'The version of the %1$s addon you have installed%2$s is out-of-date and will not work with this version WP Sync DB. <a href="%3$s">Update Now</a>', 'wp-shift-db' ), $addon['name'], $version, $update_url ); ?>
 				</div>
 			<?php
 			}
@@ -1351,9 +1351,9 @@ class WPSDB extends WPSDB_Base {
 			if ( function_exists( 'ini_get' ) && ini_get( 'safe_mode' ) && !$hide_warning ) { ?>
 				<div class="updated warning inline-message">
 					<?php
-					_e( "<strong>PHP Safe Mode Enabled</strong> &mdash; We do not officially support running this plugin in safe mode because <code>set_time_limit()</code> has no effect. Therefore we can't extend the run time of the script and ensure it doesn't time out before the migration completes. We haven't disabled the plugin however, so you're free to cross your fingers and hope for the best. However, if you have trouble, we can't help you until you turn off safe mode.", 'wp-sync-db' );
+					_e( "<strong>PHP Safe Mode Enabled</strong> &mdash; We do not officially support running this plugin in safe mode because <code>set_time_limit()</code> has no effect. Therefore we can't extend the run time of the script and ensure it doesn't time out before the migration completes. We haven't disabled the plugin however, so you're free to cross your fingers and hope for the best. However, if you have trouble, we can't help you until you turn off safe mode.", 'wp-shift-db' );
 					if ( function_exists( 'ini_get' ) ) {
-						printf( __( 'Your current PHP run time limit is set to %s seconds.', 'wp-sync-db' ), ini_get( 'max_execution_time' ) );
+						printf( __( 'Your current PHP run time limit is set to %s seconds.', 'wp-shift-db' ), ini_get( 'max_execution_time' ) );
 					} ?>
 				</div>
 				<?php
@@ -1361,7 +1361,7 @@ class WPSDB extends WPSDB_Base {
 			?>
 
 			<div class="updated warning ie-warning inline-message" style="display: none;">
-				<?php _e( "<strong>Internet Explorer Not Supported</strong> &mdash; Less than 2% of our customers use IE, so we've decided not to spend time supporting it. We ask that you use Firefox or a Webkit-based browser like Chrome or Safari instead. If this is a problem for you, please let us know.", 'wp-sync-db' ); ?>
+				<?php _e( "<strong>Internet Explorer Not Supported</strong> &mdash; Less than 2% of our customers use IE, so we've decided not to spend time supporting it. We ask that you use Firefox or a Webkit-based browser like Chrome or Safari instead. If this is a problem for you, please let us know.", 'wp-shift-db' ); ?>
 			</div>
 
 			<?php
@@ -1370,9 +1370,9 @@ class WPSDB extends WPSDB_Base {
 				?>
 				<div class="updated warning inline-message">
 					<?php
-					_e( "<strong>PHP Function Disabled</strong> &mdash; The <code>set_time_limit()</code> function is currently disabled on your server. We use this function to ensure that the migration doesn't time out. We haven't disabled the plugin however, so you're free to cross your fingers and hope for the best. You may want to contact your web host to enable this function.", 'wp-sync-db' );
+					_e( "<strong>PHP Function Disabled</strong> &mdash; The <code>set_time_limit()</code> function is currently disabled on your server. We use this function to ensure that the migration doesn't time out. We haven't disabled the plugin however, so you're free to cross your fingers and hope for the best. You may want to contact your web host to enable this function.", 'wp-shift-db' );
 					if ( function_exists( 'ini_get' ) ) {
-						printf( __( 'Your current PHP run time limit is set to %s seconds.', 'wp-sync-db' ), ini_get( 'max_execution_time' ) );
+						printf( __( 'Your current PHP run time limit is set to %s seconds.', 'wp-shift-db' ), ini_get( 'max_execution_time' ) );
 					} ?>
 				</div>
 				<?php
@@ -1545,7 +1545,7 @@ class WPSDB extends WPSDB_Base {
 
 		$table_structure = $wpdb->get_results( "DESCRIBE " . $this->backquote( $table ) );
 		if ( ! $table_structure ) {
-			$this->error = __( 'Failed to retrieve table structure, please ensure your database is online. (#125)', 'wp-sync-db' );
+			$this->error = __( 'Failed to retrieve table structure, please ensure your database is online. (#125)', 'wp-shift-db' );
 			return false;
 		}
 
@@ -1562,7 +1562,7 @@ class WPSDB extends WPSDB_Base {
 			if ( $this->form_data['action'] == 'savefile' || $_POST['stage'] == 'backup' ) {
 				$this->stow( "\n\n" );
 				$this->stow( "#\n" );
-				$this->stow( "# " . sprintf( __( 'Delete any existing table %s', 'wp-sync-db' ), $this->backquote( $table ) ) . "\n" );
+				$this->stow( "# " . sprintf( __( 'Delete any existing table %s', 'wp-shift-db' ), $this->backquote( $table ) ) . "\n" );
 				$this->stow( "#\n" );
 				$this->stow( "\n" );
 				$this->stow( "DROP TABLE IF EXISTS " . $this->backquote( $table ) . ";\n" );
@@ -1576,14 +1576,14 @@ class WPSDB extends WPSDB_Base {
 			if ( $this->form_data['action'] == 'savefile' || $_POST['stage'] == 'backup' ) {
 				$this->stow( "\n\n" );
 				$this->stow( "#\n" );
-				$this->stow( "# " . sprintf( __( 'Table structure of table %s', 'wp-sync-db' ), $this->backquote( $table ) ) . "\n" );
+				$this->stow( "# " . sprintf( __( 'Table structure of table %s', 'wp-shift-db' ), $this->backquote( $table ) ) . "\n" );
 				$this->stow( "#\n" );
 				$this->stow( "\n" );
 			}
 
 			$create_table = $wpdb->get_results( "SHOW CREATE TABLE " . $this->backquote( $table ), ARRAY_N );
 			if ( false === $create_table ) {
-				$this->error = __( 'Failed to generate the create table query, please ensure your database is online. (#126)', 'wp-sync-db' );
+				$this->error = __( 'Failed to generate the create table query, please ensure your database is online. (#126)', 'wp-shift-db' );
 				return false;
 			}
 
@@ -1619,7 +1619,7 @@ class WPSDB extends WPSDB_Base {
 			if ( $this->form_data['action'] == 'savefile' || $_POST['stage'] == 'backup' ) {
 				$this->stow( "\n\n" );
 				$this->stow( "#\n" );
-				$this->stow( '# ' . sprintf( __( 'Data contents of table %s', 'wp-sync-db' ), $this->backquote( $table ) ) . "\n" );
+				$this->stow( '# ' . sprintf( __( 'Data contents of table %s', 'wp-shift-db' ), $this->backquote( $table ) ) . "\n" );
 				$this->stow( "#\n" );
 			}
 		}
@@ -1907,7 +1907,7 @@ class WPSDB extends WPSDB_Base {
 		if ( $this->form_data['action'] == 'savefile' || $_POST['stage'] == 'backup' ) {
 			$this->stow( "\n" );
 			$this->stow( "#\n" );
-			$this->stow( "# " . sprintf( __( 'End of data contents of table %s', 'wp-sync-db' ), $this->backquote( $table ) ) . "\n" );
+			$this->stow( "# " . sprintf( __( 'End of data contents of table %s', 'wp-shift-db' ), $this->backquote( $table ) ) . "\n" );
 			$this->stow( "# --------------------------------------------------------\n" );
 			$this->stow( "\n" );
 
@@ -2037,11 +2037,11 @@ class WPSDB extends WPSDB_Base {
 
 	function db_backup_header() {
 		$charset = ( defined( 'DB_CHARSET' ) ? DB_CHARSET : 'utf8' );
-		$this->stow( "# " . __( 'WordPress MySQL database migration', 'wp-sync-db' ) . "\n", false );
+		$this->stow( "# " . __( 'WordPress MySQL database migration', 'wp-shift-db' ) . "\n", false );
 		$this->stow( "#\n", false );
-		$this->stow( "# " . sprintf( __( 'Generated: %s', 'wp-sync-db' ), date( "l j. F Y H:i T" ) ) . "\n", false );
-		$this->stow( "# " . sprintf( __( 'Hostname: %s', 'wp-sync-db' ), DB_HOST ) . "\n", false );
-		$this->stow( "# " . sprintf( __( 'Database: %s', 'wp-sync-db' ), $this->backquote( DB_NAME ) ) . "\n", false );
+		$this->stow( "# " . sprintf( __( 'Generated: %s', 'wp-shift-db' ), date( "l j. F Y H:i T" ) ) . "\n", false );
+		$this->stow( "# " . sprintf( __( 'Hostname: %s', 'wp-shift-db' ), DB_HOST ) . "\n", false );
+		$this->stow( "# " . sprintf( __( 'Database: %s', 'wp-shift-db' ), $this->backquote( DB_NAME ) ) . "\n", false );
 		$this->stow( "# --------------------------------------------------------\n\n", false );
 		$this->stow( "/*!40101 SET NAMES $charset */;\n\n", false );
 		$this->stow( "SET sql_mode='NO_AUTO_VALUE_ON_ZERO';\n\n", false );
@@ -2071,13 +2071,13 @@ class WPSDB extends WPSDB_Base {
 		if ( $this->form_data['action'] == 'savefile' || $_POST['stage'] == 'backup' ) {
 			if ( $this->gzip() && isset( $this->form_data['gzip_file'] ) ) {
 				if ( ! @gzwrite( $this->fp, $query_line ) ) {
-					$this->error = __( 'Failed to write the gzipped SQL data to the file. (#127)', 'wp-sync-db' );
+					$this->error = __( 'Failed to write the gzipped SQL data to the file. (#127)', 'wp-shift-db' );
 					return false;
 				}
 			}
 			else {
 				if ( false === @fwrite( $this->fp, $query_line ) ) {
-					$this->error = __( 'Failed to write the SQL data to the file. (#128)', 'wp-sync-db' );
+					$this->error = __( 'Failed to write the SQL data to the file. (#128)', 'wp-shift-db' );
 					return false;
 				}
 			}
@@ -2171,12 +2171,12 @@ class WPSDB extends WPSDB_Base {
 	}
 
 	function network_admin_menu() {
-		$hook_suffix = add_submenu_page( 'settings.php', 'Migrate DB', 'Migrate DB', 'manage_network_options', 'wp-sync-db', array( $this, 'options_page' ) );
+		$hook_suffix = add_submenu_page( 'settings.php', 'Migrate DB', 'Migrate DB', 'manage_network_options', 'wp-shift-db', array( $this, 'options_page' ) );
 		$this->after_admin_menu( $hook_suffix );
 	}
 
 	function admin_menu() {
-		$hook_suffix = add_management_page( 'Migrate DB', 'Migrate DB', 'export', 'wp-sync-db', array( $this, 'options_page' ) );
+		$hook_suffix = add_management_page( 'Migrate DB', 'Migrate DB', 'export', 'wp-shift-db', array( $this, 'options_page' ) );
 		$this->after_admin_menu( $hook_suffix );
 	}
 
@@ -2214,74 +2214,74 @@ class WPSDB extends WPSDB_Base {
 		$version = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? time() : $this->plugin_version;
 
 		$src = $plugins_url . 'asset/css/styles.css';
-		wp_enqueue_style( 'wp-sync-db-styles', $src, array(), $version );
+		wp_enqueue_style( 'wp-shift-db-styles', $src, array(), $version );
 
 		$src = $plugins_url . 'asset/js/common.js';
-		wp_enqueue_script( 'wp-sync-db-common', $src, NULL, $version, true );
+		wp_enqueue_script( 'wp-shift-db-common', $src, NULL, $version, true );
 
 		$src = $plugins_url . 'asset/js/hook.js';
-		wp_enqueue_script( 'wp-sync-db-hook', $src, NULL, $version, true );
+		wp_enqueue_script( 'wp-shift-db-hook', $src, NULL, $version, true );
 
 		do_action( 'wpsdb_load_assets' );
 
 		$src = $plugins_url . 'asset/js/script.js';
-		wp_enqueue_script( 'wp-sync-db-script', $src, array( 'jquery' ), $version, true );
+		wp_enqueue_script( 'wp-shift-db-script', $src, array( 'jquery' ), $version, true );
 
-		wp_localize_script( 'wp-sync-db-script', 'wpsdb_i10n', array(
-			'max_request_size_problem'				=> __( "A problem occurred when trying to change the maximum request size, please try again.", 'wp-sync-db' ),
-			'establishing_remote_connection'		=> __( "Establishing connection to remote server, please wait", 'wp-sync-db' ),
-			'connection_local_server_problem'		=> __( "A problem occurred when attempting to connect to the local server, please check the details and try again.", 'wp-sync-db' ),
-			'clear_log_problem'						=> __( "An error occurred when trying to clear the debug log. Please contact support. (#132)", 'wp-sync-db' ),
-			'update_log_problem'					=> __( "An error occurred when trying to update the debug log. Please contact support. (#133)", 'wp-sync-db' ),
-			'migrate_db_save'						=> __( "Migrate DB & Save", 'wp-sync-db' ),
-			'migrate_db'							=> __( "Migrate DB", 'wp-sync-db' ),
-			'please_select_one_table'				=> __( "Please select at least one table to migrate.", 'wp-sync-db' ),
-			'enter_name_for_profile'				=> __( "Please enter a name for your migration profile.", 'wp-sync-db' ),
-			'save_profile_problem'					=> __( "An error occurred when attempting to save the migration profile. Please see the Help tab for details on how to request support. (#118)", 'wp-sync-db' ),
-			'exporting_complete'					=> __( "Exporting complete", 'wp-sync-db' ),
-			'exporting_please_wait'					=> __( "Exporting, please wait...", 'wp-sync-db' ),
-			'please_wait'							=> __( "please wait...", 'wp-sync-db' ),
-			'complete'								=> __( "complete", 'wp-sync-db' ),
-			'migration_failed'						=> __( "Migration failed", 'wp-sync-db' ),
-			'backing_up'							=> __( "Backing up", 'wp-sync-db' ),
-			'migrating'								=> __( "Migrating", 'wp-sync-db' ),
-			'status'								=> __( "Status", 'wp-sync-db' ),
-			'response'								=> __( "Response", 'wp-sync-db' ),
-			'table_process_problem'					=> __( "A problem occurred when attempting to process the following table (#113)", 'wp-sync-db' ),
-			'table_process_problem_empty_response'	=> __( "A problem occurred when processing the following table. We were expecting a response in JSON format but instead received an empty response.", 'wp-sync-db' ),
-			'completed_with_some_errors'			=> __( "Migration completed with some errors", 'wp-sync-db' ),
-			'completed_dump_located_at'				=> __( "Migration complete, your backup is located at:", 'wp-sync-db' ),
-			'finalize_tables_problem'				=> __( "A problem occurred when finalizing the backup. (#132)", 'wp-sync-db' ),
-			'saved'									=> __( "Saved", 'wp-sync-db' ),
-			'reset_api_key'							=> __( "Any sites setup to use the current API key will no longer be able to connect. You will need to update those sites with the newly generated API key. Do you wish to continue?", 'wp-sync-db' ),
-			'reset_api_key_problem'					=> __( "An error occurred when trying to generate the API key. Please see the Help tab for details on how to request support. (#105)", 'wp-sync-db' ),
-			'remove_profile'						=> __( "You are removing the following migration profile. This cannot be undone. Do you wish to continue?", 'wp-sync-db' ),
-			'remove_profile_problem'				=> __( "An error occurred when trying to delete the profile. Please see the Help tab for details on how to request support. (#106)", 'wp-sync-db' ),
-			'remove_profile_not_found'				=> __( "The selected migration profile could not be deleted because it was not found.\nPlease refresh this page to see an accurate list of the currently available migration profiles.", 'wp-sync-db' ),
-			'change_connection_info'				=> __( "If you change the connection details, you will lose any replaces and table selections you have made below. Do you wish to continue?", 'wp-sync-db' ),
-			'enter_connection_info'					=> __( "Please enter the connection information above to continue.", 'wp-sync-db' ),
-			'save_settings_problem'					=> __( "An error occurred when trying to save the settings. Please try again. If the problem persists, please see the Help tab for details on how to request support. (#108)", 'wp-sync-db' ),
-			'connection_info_missing'				=> __( "The connection information appears to be missing, please enter it to continue.", 'wp-sync-db' ),
-			'connection_info_incorrect'				=> __( "The connection information appears to be incorrect, it should consist of two lines. The first being the remote server's URL and the second being the secret key.", 'wp-sync-db' ),
-			'connection_info_url_invalid'			=> __( "The URL on the first line appears to be invalid, please check it and try again.", 'wp-sync-db' ),
-			'connection_info_key_invalid'			=> __( "The secret key on the second line appears to be invalid. It should be a 32 character string that consists of letters, numbers and special characters only.", 'wp-sync-db' ),
-			'connection_info_local_url'				=> __( "It appears you've entered the URL for this website, you need to provide the URL of the remote website instead.", 'wp-sync-db' ),
-			'connection_info_local_key'				=> __( "It appears you've entered the secret key for this website, you need to provide the secret key for the remote website instead.", 'wp-sync-db' ),
-			'time_elapsed'							=> __( "Time Elapsed:", 'wp-sync-db' ),
-			'pause'									=> __( "Pause", 'wp-sync-db' ),
-			'migration_paused'						=> __( "Migration Paused", 'wp-sync-db' ),
-			'resume'								=> __( "Resume", 'wp-sync-db' ),
-			'completing_current_request'			=> __( "Completing current request", 'wp-sync-db' ),
-			'cancelling_migration'					=> __( "Cancelling migration", 'wp-sync-db' ),
-			'paused'								=> __( "Paused", 'wp-sync-db' ),
-			'removing_local_sql'					=> __( "Removing the local MySQL export file", 'wp-sync-db' ),
-			'removing_local_backup'					=> __( "Removing the local backup MySQL export file", 'wp-sync-db' ),
-			'removing_local_temp_tables'			=> __( "Removing the local temporary tables", 'wp-sync-db' ),
-			'removing_remote_sql'					=> __( "Removing the remote backup MySQL export file", 'wp-sync-db' ),
-			'removing_remote_temp_tables'			=> __( "Removing the remote temporary tables", 'wp-sync-db' ),
-			'migration_cancellation_failed'			=> __( "Migration cancellation failed", 'wp-sync-db' ),
-			'manually_remove_temp_files'			=> __( "A problem occurred while cancelling the migration, you may have to manually delete some temporary files / tables.", 'wp-sync-db' ),
-			'migration_cancelled'					=> __( "Migration cancelled", 'wp-sync-db' ),
+		wp_localize_script( 'wp-shift-db-script', 'wpsdb_i10n', array(
+			'max_request_size_problem'				=> __( "A problem occurred when trying to change the maximum request size, please try again.", 'wp-shift-db' ),
+			'establishing_remote_connection'		=> __( "Establishing connection to remote server, please wait", 'wp-shift-db' ),
+			'connection_local_server_problem'		=> __( "A problem occurred when attempting to connect to the local server, please check the details and try again.", 'wp-shift-db' ),
+			'clear_log_problem'						=> __( "An error occurred when trying to clear the debug log. Please contact support. (#132)", 'wp-shift-db' ),
+			'update_log_problem'					=> __( "An error occurred when trying to update the debug log. Please contact support. (#133)", 'wp-shift-db' ),
+			'migrate_db_save'						=> __( "Migrate DB & Save", 'wp-shift-db' ),
+			'migrate_db'							=> __( "Migrate DB", 'wp-shift-db' ),
+			'please_select_one_table'				=> __( "Please select at least one table to migrate.", 'wp-shift-db' ),
+			'enter_name_for_profile'				=> __( "Please enter a name for your migration profile.", 'wp-shift-db' ),
+			'save_profile_problem'					=> __( "An error occurred when attempting to save the migration profile. Please see the Help tab for details on how to request support. (#118)", 'wp-shift-db' ),
+			'exporting_complete'					=> __( "Exporting complete", 'wp-shift-db' ),
+			'exporting_please_wait'					=> __( "Exporting, please wait...", 'wp-shift-db' ),
+			'please_wait'							=> __( "please wait...", 'wp-shift-db' ),
+			'complete'								=> __( "complete", 'wp-shift-db' ),
+			'migration_failed'						=> __( "Migration failed", 'wp-shift-db' ),
+			'backing_up'							=> __( "Backing up", 'wp-shift-db' ),
+			'migrating'								=> __( "Migrating", 'wp-shift-db' ),
+			'status'								=> __( "Status", 'wp-shift-db' ),
+			'response'								=> __( "Response", 'wp-shift-db' ),
+			'table_process_problem'					=> __( "A problem occurred when attempting to process the following table (#113)", 'wp-shift-db' ),
+			'table_process_problem_empty_response'	=> __( "A problem occurred when processing the following table. We were expecting a response in JSON format but instead received an empty response.", 'wp-shift-db' ),
+			'completed_with_some_errors'			=> __( "Migration completed with some errors", 'wp-shift-db' ),
+			'completed_dump_located_at'				=> __( "Migration complete, your backup is located at:", 'wp-shift-db' ),
+			'finalize_tables_problem'				=> __( "A problem occurred when finalizing the backup. (#132)", 'wp-shift-db' ),
+			'saved'									=> __( "Saved", 'wp-shift-db' ),
+			'reset_api_key'							=> __( "Any sites setup to use the current API key will no longer be able to connect. You will need to update those sites with the newly generated API key. Do you wish to continue?", 'wp-shift-db' ),
+			'reset_api_key_problem'					=> __( "An error occurred when trying to generate the API key. Please see the Help tab for details on how to request support. (#105)", 'wp-shift-db' ),
+			'remove_profile'						=> __( "You are removing the following migration profile. This cannot be undone. Do you wish to continue?", 'wp-shift-db' ),
+			'remove_profile_problem'				=> __( "An error occurred when trying to delete the profile. Please see the Help tab for details on how to request support. (#106)", 'wp-shift-db' ),
+			'remove_profile_not_found'				=> __( "The selected migration profile could not be deleted because it was not found.\nPlease refresh this page to see an accurate list of the currently available migration profiles.", 'wp-shift-db' ),
+			'change_connection_info'				=> __( "If you change the connection details, you will lose any replaces and table selections you have made below. Do you wish to continue?", 'wp-shift-db' ),
+			'enter_connection_info'					=> __( "Please enter the connection information above to continue.", 'wp-shift-db' ),
+			'save_settings_problem'					=> __( "An error occurred when trying to save the settings. Please try again. If the problem persists, please see the Help tab for details on how to request support. (#108)", 'wp-shift-db' ),
+			'connection_info_missing'				=> __( "The connection information appears to be missing, please enter it to continue.", 'wp-shift-db' ),
+			'connection_info_incorrect'				=> __( "The connection information appears to be incorrect, it should consist of two lines. The first being the remote server's URL and the second being the secret key.", 'wp-shift-db' ),
+			'connection_info_url_invalid'			=> __( "The URL on the first line appears to be invalid, please check it and try again.", 'wp-shift-db' ),
+			'connection_info_key_invalid'			=> __( "The secret key on the second line appears to be invalid. It should be a 32 character string that consists of letters, numbers and special characters only.", 'wp-shift-db' ),
+			'connection_info_local_url'				=> __( "It appears you've entered the URL for this website, you need to provide the URL of the remote website instead.", 'wp-shift-db' ),
+			'connection_info_local_key'				=> __( "It appears you've entered the secret key for this website, you need to provide the secret key for the remote website instead.", 'wp-shift-db' ),
+			'time_elapsed'							=> __( "Time Elapsed:", 'wp-shift-db' ),
+			'pause'									=> __( "Pause", 'wp-shift-db' ),
+			'migration_paused'						=> __( "Migration Paused", 'wp-shift-db' ),
+			'resume'								=> __( "Resume", 'wp-shift-db' ),
+			'completing_current_request'			=> __( "Completing current request", 'wp-shift-db' ),
+			'cancelling_migration'					=> __( "Cancelling migration", 'wp-shift-db' ),
+			'paused'								=> __( "Paused", 'wp-shift-db' ),
+			'removing_local_sql'					=> __( "Removing the local MySQL export file", 'wp-shift-db' ),
+			'removing_local_backup'					=> __( "Removing the local backup MySQL export file", 'wp-shift-db' ),
+			'removing_local_temp_tables'			=> __( "Removing the local temporary tables", 'wp-shift-db' ),
+			'removing_remote_sql'					=> __( "Removing the remote backup MySQL export file", 'wp-shift-db' ),
+			'removing_remote_temp_tables'			=> __( "Removing the remote temporary tables", 'wp-shift-db' ),
+			'migration_cancellation_failed'			=> __( "Migration cancellation failed", 'wp-shift-db' ),
+			'manually_remove_temp_files'			=> __( "A problem occurred while cancelling the migration, you may have to manually delete some temporary files / tables.", 'wp-shift-db' ),
+			'migration_cancelled'					=> __( "Migration cancelled", 'wp-shift-db' ),
 		) );
 
 		wp_enqueue_script('jquery');
@@ -2315,7 +2315,7 @@ class WPSDB extends WPSDB_Base {
 			exit;
 		}
 		else {
-			wp_die( __( 'Could not find the file to download:', 'wp-sync-db' ) . '<br />' . $diskfile );
+			wp_die( __( 'Could not find the file to download:', 'wp-shift-db' ) . '<br />' . $diskfile );
 		}
 	}
 
@@ -2497,12 +2497,12 @@ class WPSDB extends WPSDB_Base {
 		$dump_file = $this->get_upload_info( 'path' ) . DS . $dump_file;
 
 		if( empty( $dump_file ) || false == file_exists( $dump_file ) ) {
-			_e( 'MySQL export file not found.', 'wp-sync-db' );
+			_e( 'MySQL export file not found.', 'wp-shift-db' );
 			exit;
 		}
 
 		if( false === @unlink( $dump_file ) ) {
-			e( 'Could not delete the MySQL export file.', 'wp-sync-db' );
+			e( 'Could not delete the MySQL export file.', 'wp-shift-db' );
 			exit;
 		}
 	}

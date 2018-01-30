@@ -7,7 +7,7 @@ class WPSDB_Addon extends WPSDB_Base {
 	}
 
 	function meets_version_requirements( $version_required ) {
-		$wpsdb_version = $GLOBALS['wpsdb_meta']['wp-sync-db']['version'];
+		$wpsdb_version = $GLOBALS['wpsdb_meta']['wp-shift-db']['version'];
 		$result = version_compare( $wpsdb_version, $version_required, '>=' );
 		$this->version_required = $version_required;
 		if( false == $result ) $this->hook_version_requirement_actions();
@@ -51,10 +51,10 @@ class WPSDB_Addon extends WPSDB_Base {
 			<?php
 				$addon_name = $this->get_plugin_name();
 				$required = $this->version_required;
-				$installed = $GLOBALS['wpsdb_meta']['wp-sync-db']['version'];
-				$wpsdb_basename = sprintf( '%s/%s.php', $GLOBALS['wpsdb_meta']['wp-sync-db']['folder'], 'wp-sync-db' );
+				$installed = $GLOBALS['wpsdb_meta']['wp-shift-db']['version'];
+				$wpsdb_basename = sprintf( '%s/%s.php', $GLOBALS['wpsdb_meta']['wp-shift-db']['folder'], 'wp-shift-db' );
 				$update = wp_nonce_url( network_admin_url( 'update.php?action=upgrade-plugin&plugin=' . urlencode( $wpsdb_basename ) ), 'upgrade-plugin_' . $wpsdb_basename );
-				printf( __( 'The version of %1$s you have installed, requires version %2$s of WP Sync DB. You currently have %3$s installed. <strong><a href="%4$s">Update Now</a></strong>', 'wp-sync-db' ), $addon_name, $required, $installed, $update );
+				printf( __( 'The version of %1$s you have installed, requires version %2$s of WP Sync DB. You currently have %3$s installed. <strong><a href="%4$s">Update Now</a></strong>', 'wp-shift-db' ), $addon_name, $required, $installed, $update );
 			?>
 		</div>
 		<?php

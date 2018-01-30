@@ -22,7 +22,7 @@ function wpsdbc_exclude_plugins( $plugins ) {
 		$blacklist_plugins = array_flip( $wpsdb_settings['blacklist_plugins'] );
 	}
 	foreach( $plugins as $key => $plugin ) {
-		if ( false !== strpos( $plugin, 'wp-sync-db' ) || !isset( $blacklist_plugins[$plugin] ) ) continue;
+		if ( false !== strpos( $plugin, 'wp-shift-db' ) || !isset( $blacklist_plugins[$plugin] ) ) continue;
 		unset( $plugins[$key] );
 	}
 	return $plugins;
@@ -42,7 +42,7 @@ function wpsdbc_exclude_site_plugins( $plugins ) {
 		$blacklist_plugins = array_flip( $wpsdb_settings['blacklist_plugins'] );
 	}
 	foreach( array_keys( $plugins ) as $plugin ) {
-		if ( false !== strpos( $plugin, 'wp-sync-db' ) || !isset( $blacklist_plugins[$plugin] ) ) continue;
+		if ( false !== strpos( $plugin, 'wp-shift-db' ) || !isset( $blacklist_plugins[$plugin] ) ) continue;
 		unset( $plugins[$plugin] );
 	}
 	return $plugins;

@@ -34,7 +34,7 @@ class WPSDB_Base {
 			)
 		);
 
-		$this->invalid_content_verification_error = __( 'Invalid content verification signature, please verify the connection information on the remote site and try again.', 'wp-sync-db' );
+		$this->invalid_content_verification_error = __( 'Invalid content verification signature, please verify the connection information on the remote site and try again.', 'wp-shift-db' );
 
 		$this->transient_timeout = 60 * 60 * 12;
 		$this->transient_retry_timeout = 60 * 60 * 2;
@@ -48,10 +48,10 @@ class WPSDB_Base {
 		$this->plugin_title = str_ireplace( array( 'db', 'wp', '.php' ), array( 'DB', 'WP', '' ), $this->plugin_title );
 
 		if ( is_multisite() ) {
-			$this->plugin_base = 'settings.php?page=wp-sync-db';
+			$this->plugin_base = 'settings.php?page=wp-shift-db';
 		}
 		else {
-			$this->plugin_base = 'tools.php?page=wp-sync-db';
+			$this->plugin_base = 'tools.php?page=wp-shift-db';
 		}
 
 		// allow devs to change the temporary prefix applied to the tables
@@ -123,23 +123,23 @@ class WPSDB_Base {
 				return $this->retry_remote_post( $url, $data, $scope, $args, $expecting_serial );
 			}
 			else if( isset( $response->errors['http_request_failed'][0] ) && strstr( $response->errors['http_request_failed'][0], 'timed out' ) ) {
-				$this->error = sprintf( __( 'The connection to the remote server has timed out, no changes have been committed. (#134 - scope: %s)', 'wp-sync-db' ), $scope );
+				$this->error = sprintf( __( 'The connection to the remote server has timed out, no changes have been committed. (#134 - scope: %s)', 'wp-shift-db' ), $scope );
 			}
 			else if ( isset( $response->errors['http_request_failed'][0] ) && ( strstr( $response->errors['http_request_failed'][0], 'Could not resolve host' ) || strstr( $response->errors['http_request_failed'][0], 'couldn\'t connect to host' ) ) ) {
-				$this->error = sprintf( __( 'We could not find: %s. Are you sure this is the correct URL?', 'wp-sync-db' ), $_POST['url'] );
+				$this->error = sprintf( __( 'We could not find: %s. Are you sure this is the correct URL?', 'wp-shift-db' ), $_POST['url'] );
 				$url_bits = parse_url( $_POST['url'] );
 				if( strstr( $_POST['url'], 'dev.' ) || strstr( $_POST['url'], '.dev' ) || ! strstr( $url_bits['host'], '.' ) ) {
 					$this->error .= '<br />';
 					if( $_POST['intent'] == 'pull' ) {
-						$this->error .= __( 'It appears that you might be trying to pull from a local environment. This will not work if <u>this</u> website happens to be located on a remote server, it would be impossible for this server to contact your local environment.', 'wp-sync-db' );
+						$this->error .= __( 'It appears that you might be trying to pull from a local environment. This will not work if <u>this</u> website happens to be located on a remote server, it would be impossible for this server to contact your local environment.', 'wp-shift-db' );
 					}
 					else {
-						$this->error .= __( 'It appears that you might be trying to push to a local environment. This will not work if <u>this</u> website happens to be located on a remote server, it would be impossible for this server to contact your local environment.', 'wp-sync-db' );
+						$this->error .= __( 'It appears that you might be trying to push to a local environment. This will not work if <u>this</u> website happens to be located on a remote server, it would be impossible for this server to contact your local environment.', 'wp-shift-db' );
 					}
 				}
 			}
 			else {
-				$this->error = sprintf( __( 'The connection failed, an unexpected error occurred, please contact support. (#121 - scope: %s)', 'wp-sync-db' ), $scope );
+				$this->error = sprintf( __( 'The connection failed, an unexpected error occurred, please contact support. (#121 - scope: %s)', 'wp-shift-db' ), $scope );
 			}
 			$this->log_error( $this->error, $response );
 			return false;
@@ -149,12 +149,12 @@ class WPSDB_Base {
 				return $this->retry_remote_post( $url, $data, $scope, $args, $expecting_serial );
 			}
 			else if( $response['response']['code'] == '401' ) {
-				$this->error = __( 'The remote site is protected with Basic Authentication. Please enter the username and password above to continue. (401 Unauthorized)', 'wp-sync-db' );
+				$this->error = __( 'The remote site is protected with Basic Authentication. Please enter the username and password above to continue. (401 Unauthorized)', 'wp-shift-db' );
 				$this->log_error( $this->error, $response );
 				return false;
 			}
 			else {
-				$this->error = sprintf( __( 'Unable to connect to the remote server, please check the connection details - %1$s %2$s (#129 - scope: %3$s)', 'wp-sync-db' ), $response['response']['code'], $response['response']['message'], $scope );
+				$this->error = sprintf( __( 'Unable to connect to the remote server, please check the connection details - %1$s %2$s (#129 - scope: %3$s)', 'wp-shift-db' ), $response['response']['code'], $response['response']['message'], $scope );
 				$this->log_error( $this->error, $response );
 				return false;
 			}
@@ -163,7 +163,7 @@ class WPSDB_Base {
 			if( strpos( $url, 'https://' ) === 0 && $scope == 'ajax_verify_connection_to_remote_site' ) {
 				return $this->retry_remote_post( $url, $data, $scope, $args, $expecting_serial );
 			}
-			$this->error = __( 'There was a problem with the AJAX request, we were expecting a serialized response, instead we received:<br />', 'wp-sync-db' ) . htmlentities( $response['body'] );
+			$this->error = __( 'There was a problem with the AJAX request, we were expecting a serialized response, instead we received:<br />', 'wp-shift-db' ) . htmlentities( $response['body'] );
 			$this->log_error( $this->error, $response );
 			return false;
 		}
@@ -171,7 +171,7 @@ class WPSDB_Base {
 			if( strpos( $url, 'https://' ) === 0 && $scope == 'ajax_verify_connection_to_remote_site' ) {
 				return $this->retry_remote_post( $url, $data, $scope, $args, $expecting_serial );
 			}
-			$this->error = sprintf( __( 'WP Sync DB does not seem to be installed or active on the remote site. (#131 - scope: %s)', 'wp-sync-db' ), $scope );
+			$this->error = sprintf( __( 'WP Sync DB does not seem to be installed or active on the remote site. (#131 - scope: %s)', 'wp-shift-db' ), $scope );
 			$this->log_error( $this->error, $response );
 			return false;
 		}
@@ -384,14 +384,14 @@ class WPSDB_Base {
 		if ( defined( 'DOING_WPSDB_TESTS' ) || $this->doing_cli_migration ) return;
 		$result = check_ajax_referer( $action, 'nonce', false );
 		if ( false === $result ) {
-			$return = array( 'wpsdb_error' => 1, 'body' => sprintf( __( 'Invalid nonce for: %s', 'wp-sync-db' ), $action ) );
+			$return = array( 'wpsdb_error' => 1, 'body' => sprintf( __( 'Invalid nonce for: %s', 'wp-shift-db' ), $action ) );
 			$this->end_ajax( json_encode( $return ) );
 		}
 
 		$cap = ( is_multisite() ) ? 'manage_network_options' : 'export';
 		$cap = apply_filters( 'wpsdb_ajax_cap', $cap );
 		if ( !current_user_can( $cap ) ) {
-			$return = array( 'wpsdb_error' => 1, 'body' => sprintf( __( 'Access denied for: %s', 'wp-sync-db' ), $action ) );
+			$return = array( 'wpsdb_error' => 1, 'body' => sprintf( __( 'Access denied for: %s', 'wp-shift-db' ), $action ) );
 			$this->end_ajax( json_encode( $return ) );
 		}
 	}
