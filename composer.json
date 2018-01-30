@@ -4,7 +4,7 @@
   "homepage": "https://github.com/fahim-spurbee/wp-shift-db",
   "license": "GPL-2.0",
   "description": "WP Shift DB eliminates the manual work of migrating a WP database.",
-  "keywords": ["plugin","wordpress","wp-sync-db","db"],
+  "keywords": ["plugin","wordpress","wp-shift-db-db","wp-sync-db","db"],
   "require": {
     "php": ">=5.3.7",
     "composer/installers": "~1.5"
