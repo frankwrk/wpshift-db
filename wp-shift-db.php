@@ -1,12 +1,11 @@
 <?php
 /*
 Plugin Name: WP Shift DB
-Description: Export, push, and pull to migrate your WordPress databases.
-Author: Sean Lang
+Description: Push, pull and export to migrate your WordPress DB.
+Author: Mohammad Fahim
 Version: 1.5
-Author URI: http://slang.cx
-GitHub Plugin URI: wp-sync-db/wp-sync-db
-Network: True
+Author URI: http://fahim.xyz
+GitHub Plugin URI: fahim-spurbee/wp-shift-db
 */
 
 $GLOBALS['wpsdb_meta']['wp-sync-db']['version'] = '1.5';

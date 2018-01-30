@@ -178,7 +178,7 @@ var execute_next_step;
     return url.replace(/^https?:/i, "");
   }
 
-  $(document).ready(function() {
+  jQuery(document).ready(function() {
     $('#plugin-compatibility').change(function(e) {
       var install = '1';
       if ($(this).is(':checked')) {
