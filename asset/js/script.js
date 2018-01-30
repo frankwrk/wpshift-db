@@ -178,7 +178,7 @@ var execute_next_step;
     return url.replace(/^https?:/i, "");
   }
 
-  jQuery(document).ready(function() {
+  $(document).ready(function() {
     $('#plugin-compatibility').change(function(e) {
       var install = '1';
       if ($(this).is(':checked')) {
@@ -1295,12 +1295,12 @@ var execute_next_step;
     };
 
     // close progress pop up once migration is completed
-    $('body').delegate('.close-progress-content-button', 'click', function(
+    $('body').on('click', '.close-progress-content-button', function(
       e) {
       hide_overlay();
     });
 
-    $('body').delegate('#overlay', 'click', function() {
+    $('body').on('click', '#overlay', function() {
       if (migration_completed == true) {
         hide_overlay();
       }
@@ -1407,7 +1407,7 @@ var execute_next_step;
     });
 
     // progress label updating
-    $('body').delegate('.progress-chunk-hover', 'mousemove', function(e) {
+    $('body').on('mousemove', '.progress-chunk-hover', function(e) {
       mX = e.pageX;
       offset = $('.progress-bar-wrapper').offset();
       label_offset = $('.progress-label').outerWidth() / 2;
@@ -1417,7 +1417,7 @@ var execute_next_step;
     });
 
     // show / hide progress lavel on hover
-    $('body').delegate('.progress-chunk-hover', 'hover', function(event) {
+    $('body').on('mouseenter mouseleave', '.progress-chunk-hover', function(event) {
       if (event.type === 'mouseenter') {
         $('.progress-label').addClass('label-visible');
       } else {
@@ -1629,13 +1629,13 @@ var execute_next_step;
     });
 
     // repeatable fields
-    $('body').delegate('.add-row', 'click', function() {
+    $('body').on('click', '.add-row', function() {
       $(this).parents('tr').before($('.original-repeatable-field').clone()
         .removeClass('original-repeatable-field'));
     });
 
     // repeatable fields
-    $('body').delegate('.replace-remove-row', 'click', function() {
+    $('body').on('click', '.replace-remove-row', function() {
       $(this).parents('tr').remove();
       if ($('.replace-row').length < 2) {
         $('.no-replaces-message').show();
@@ -1648,8 +1648,8 @@ var execute_next_step;
       $('.no-replaces-message').hide();
     });
 
-    $('body').delegate('#find-and-replace-sort tbody tr.replace-row',
-      'hover', function(event) {
+    $('body').on('mouseenter mouseleave', '#find-and-replace-sort tbody tr.replace-row',
+      function(event) {
         if (event.type === 'mouseenter') {
           $('.replace-remove-row', this).show();
         } else {
@@ -1671,7 +1671,7 @@ var execute_next_step;
     });
 
     // delete saved profiles
-    $('body').delegate('.save-migration-profile-wrap li', 'hover', function(
+    $('body').on('mouseenter mouseleave', '.save-migration-profile-wrap li', function(
       event) {
       if (event.type === 'mouseenter') {
         $('.delete-profile', this).show();
@@ -1811,7 +1811,7 @@ var execute_next_step;
     });
 
     // delete a profile from the migrate form area
-    $('body').delegate('.delete-profile', 'click', function() {
+    $('body').on('click', '.delete-profile', function() {
       var name = $(this).next().clone();
       $('input', name).remove();
       var name = $.trim($(name).html());
@@ -1875,7 +1875,7 @@ var execute_next_step;
 
     // warn the user when editing the connection info after a connection has
     // been established
-    $('body').delegate('.temp-disabled', 'click', function() {
+    $('body').on('click', '.temp-disabled', function() {
       var answer = confirm(wpsdb_i10n.change_connection_info);
 
       if (!answer) {
@@ -1952,11 +1952,11 @@ var execute_next_step;
 
     });
 
-    $('body').delegate('.try-again', 'click', function() {
+    $('body').on('click', '.try-again', function() {
       connection_box_changed();
     });
 
-    $('body').delegate('.try-http', 'click', function() {
+    $('body').on('click', '.try-http', function() {
       var connection_info = $.trim($('.pull-push-connection-info').val())
         .split("\n");
       var new_url = connection_info[0].replace('https', 'http');
@@ -1969,7 +1969,7 @@ var execute_next_step;
       profile_name_edited = true;
     });
 
-    $('body').delegate('.temporarily-disable-ssl', 'click', function() {
+    $('body').on('click', '.temporarily-disable-ssl', function() {
       if (window.location.hash) {
         var hash = window.location.hash.substring(1);
       }
@@ -2191,7 +2191,7 @@ var execute_next_step;
       });
     }
 
-    $('body').delegate('.pause-resume', 'click', function() {
+    $('body').on('click', '.pause-resume', function() {
       if (true == migration_paused) {
         migration_paused = false;
         doing_ajax = true;
@@ -2213,7 +2213,7 @@ var execute_next_step;
       }
     });
 
-    $('body').delegate('.cancel', 'click', function() {
+    $('body').on('click', '.cancel', function() {
       migration_cancelled = true;
       migration_paused = false;
       $('.progress-text').html(wpsdb_i10n.completing_current_request);
