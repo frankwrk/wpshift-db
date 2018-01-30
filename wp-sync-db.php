@@ -1,6 +1,6 @@
 <?php
 /*
-Plugin Name: WP Sync DB
+Plugin Name: WP Shift DB
 Description: Export, push, and pull to migrate your WordPress databases.
 Author: Sean Lang
 Version: 1.5
