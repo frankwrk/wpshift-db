@@ -1,7 +1,7 @@
 {
   "name": "fahimxyz/wp-shift-db",
   "type": "wordpress-plugin",
-  "homepage": "https://github.com/fahim-spurbee/wp-shift-db",
+  "homepage": "https://github.com/fahimxyz/wp-shift-db",
   "license": "GPL-2.0",
   "description": "WP Shift DB eliminates the manual work of migrating a WP database.",
   "keywords": ["plugin","wordpress","wp-shift-db","db"],
